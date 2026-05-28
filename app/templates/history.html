@@ -1,0 +1,119 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <h1 class="text-white mb-4">My History</h1>
+
+    <ul class="nav nav-tabs" id="historyTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="crop-tab" data-toggle="tab" href="#crop" role="tab"
+               aria-controls="crop" aria-selected="true">Crop Recommendations</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="fertilizer-tab" data-toggle="tab" href="#fertilizer" role="tab"
+               aria-controls="fertilizer" aria-selected="false">Fertilizer Recommendations</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="disease-tab" data-toggle="tab" href="#disease" role="tab"
+               aria-controls="disease" aria-selected="false">Disease Predictions</a>
+        </li>
+    </ul>
+
+    <div class="tab-content bg-dark text-white border border-secondary border-top-0 p-4" id="historyTabContent">
+
+        <!-- Crop Tab -->
+        <div class="tab-pane fade show active" id="crop" role="tabpanel" aria-labelledby="crop-tab">
+            {% set crop_records = records | selectattr('type', 'equalto', 'crop') | list %}
+            {% if crop_records %}
+                {% for record in crop_records %}
+                <div class="card bg-secondary text-white mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Recommended Crop: <strong>{{ record.result }}</strong></h5>
+                        <p class="card-text mb-1">
+                            <small class="text-white">
+                                N: {{ record.inputs.get('N', '-') }} &nbsp;|&nbsp;
+                                P: {{ record.inputs.get('P', '-') }} &nbsp;|&nbsp;
+                                K: {{ record.inputs.get('K', '-') }} &nbsp;|&nbsp;
+                                pH: {{ record.inputs.get('ph', '-') }} &nbsp;|&nbsp;
+                                Rainfall: {{ record.inputs.get('rainfall', '-') }} mm &nbsp;|&nbsp;
+                                City: {{ record.inputs.get('city', '-') }}
+                            </small>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-light">
+                                {% if record.timestamp %}
+                                    {{ record.timestamp.strftime('%Y-%m-%d %H:%M UTC') }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </small>
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted mt-3">No history available yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Fertilizer Tab -->
+        <div class="tab-pane fade" id="fertilizer" role="tabpanel" aria-labelledby="fertilizer-tab">
+            {% set fert_records = records | selectattr('type', 'equalto', 'fertilizer') | list %}
+            {% if fert_records %}
+                {% for record in fert_records %}
+                <div class="card bg-secondary text-white mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Recommendation Key: <strong>{{ record.result }}</strong></h5>
+                        <p class="card-text mb-1">
+                            <small>
+                                Crop: {{ record.inputs.get('crop_name', '-') }} &nbsp;|&nbsp;
+                                N: {{ record.inputs.get('N', '-') }} &nbsp;|&nbsp;
+                                P: {{ record.inputs.get('P', '-') }} &nbsp;|&nbsp;
+                                K: {{ record.inputs.get('K', '-') }}
+                            </small>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-light">
+                                {% if record.timestamp %}
+                                    {{ record.timestamp.strftime('%Y-%m-%d %H:%M UTC') }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </small>
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted mt-3">No history available yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Disease Tab -->
+        <div class="tab-pane fade" id="disease" role="tabpanel" aria-labelledby="disease-tab">
+            {% set disease_records = records | selectattr('type', 'equalto', 'disease') | list %}
+            {% if disease_records %}
+                {% for record in disease_records %}
+                <div class="card bg-secondary text-white mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Predicted Disease: <strong>{{ record.result }}</strong></h5>
+                        <p class="card-text">
+                            <small class="text-light">
+                                {% if record.timestamp %}
+                                    {{ record.timestamp.strftime('%Y-%m-%d %H:%M UTC') }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </small>
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted mt-3">No history available yet.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+numpy==1.23.5
+pandas
+Flask
+scikit-learn==0.24.2
+https://download.pytorch.org/whl/cpu/torch-1.7.0%2Bcpu-cp38-cp38-win_amd64.whl
+https://download.pytorch.org/whl/cpu/torchvision-0.8.1%2Bcpu-cp38-cp38-win_amd64.whl
+requests
+Pillow
+flask-login
+flask-bcrypt
+pymongo[srv]
+dnspython
+python-dotenv
